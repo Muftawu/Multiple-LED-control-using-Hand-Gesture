@@ -1,0 +1,92 @@
+#include <cvzone.h>
+#include <LiquidCrystal.h>
+
+LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
+
+int red =    13;
+int blue =   2;
+int green =  3;
+int yellow = 4;
+int white =  5;
+
+SerialData data(1, 1);
+int val[2];
+
+
+void setup () {
+  data.begin(9600);
+
+  pinMode(13, OUTPUT);
+  pinMode(2, OUTPUT);
+  pinMode(3, OUTPUT);
+  pinMode(4, OUTPUT);
+  pinMode(5, OUTPUT);
+
+  digitalWrite(13, LOW);
+  digitalWrite(2, LOW);
+  digitalWrite(3, LOW);
+  digitalWrite(4, LOW);
+  digitalWrite(5, LOW);
+
+}
+
+void loop () {
+  data.Get(val);
+
+
+  if (val[0] == 1 ) {
+    digitalWrite(red, HIGH);
+    digitalWrite(2, LOW);   digitalWrite(3, LOW);  digitalWrite(4, LOW); digitalWrite(5, LOW);
+    delay(10);
+    lcd.setCursor(0, 0);
+    lcd.println("Red LED is ON      ");
+    delay(10);
+  }
+
+  else if (val[0] == 2 ) {
+    digitalWrite(blue, HIGH);
+    digitalWrite(13, LOW);   digitalWrite(3, LOW);  digitalWrite(4, LOW); digitalWrite(5, LOW);
+    delay(10);
+    lcd.setCursor(0, 0);
+    lcd.println("Blue LED is ON    ");
+    delay(10);
+  }
+
+  else if (val[0] == 3 ) {
+    digitalWrite(green, HIGH);
+    digitalWrite(2, LOW);   digitalWrite(13, LOW);  digitalWrite(4, LOW); digitalWrite(5, LOW);
+    delay(10);
+    lcd.setCursor(0, 0);
+    lcd.println("Green LED is ON    ");
+    delay(10);
+  }
+
+  else if (val[0] == 4 ) {
+    digitalWrite(yellow, HIGH);
+    digitalWrite(2, LOW);   digitalWrite(3, LOW);  digitalWrite(13, LOW); digitalWrite(5, LOW);
+    delay(10);
+    lcd.setCursor(0, 0);
+    lcd.println("Yellow LED is ON   " );
+    
+  }
+
+  else if (val[0] == 5 ) {
+    digitalWrite(white, HIGH);
+    digitalWrite(2, LOW);   digitalWrite(3, LOW);  digitalWrite(4, LOW); digitalWrite(13, LOW);
+    delay(10);
+    lcd.setCursor(0, 0);
+    lcd.println("White LED is ON     ");    
+    delay(10);
+  }
+
+  else {
+    digitalWrite(1, LOW);
+    digitalWrite(2, LOW);
+    digitalWrite(3, LOW);
+    digitalWrite(4, LOW);
+    digitalWrite(5, LOW);
+    lcd.setCursor(0, 0);
+    lcd.println("All LEDs turned OFF    ");
+  }
+
+}
