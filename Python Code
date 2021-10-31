@@ -1,0 +1,38 @@
+import cv2
+from cvzone.HandTrackingModule import HandDetector
+from cvzone.SerialModule import SerialObject
+from time import sleep 
+
+
+cap = cv2.VideoCapture(0)
+cap.set(3,1280)
+cap.set(4,720)
+detector = HandDetector(detectionCon=0.8,maxHands=1)
+arduino = SerialObject('/dev/ttyUSB0')
+
+
+my_array = [ [0,0,0,0,0], [0,1,0,0,0], [0,1,1,0,0], [0,1,1,1,0], [0,1,1,1,1], [1,1,1,1,1]  ]
+my_numbers = [ 0, 1, 2, 3, 4, 5,6]
+code = []
+
+while 1:
+    success, image = cap.read()
+    hands, bboxInfo = detector.findHands(image)
+
+    if len(hands) == 1:
+
+        for i in range(0,6):
+            if detector.fingersUp(hands[0]) == my_array[i]:
+                kane = (my_numbers[i]) 
+                cv2.putText(image,str(kane),(70,110),(cv2.FONT_HERSHEY_COMPLEX),3,(0,0,255),3)
+                arduino.sendData([kane])
+        
+            else:
+                if detector.fingersUp(hands[0]) == [0,0,0,0,0]:
+                    arduino.sendData([0])
+
+    rec1 = cv2.rectangle(image,(50,30),(150,140),(0,255,0),2)
+
+                
+    cv2.imshow('image',image)
+    cv2.waitKey(1)
